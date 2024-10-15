@@ -21,23 +21,24 @@ class LiaSpark {
      */
     async getRes(payload) {
         try {
-            const response = await axios.get(`${LiaSpark.URL}/${this.author}/api/${this.name}`, {
+            const response = await axios.get(`${LiaSpark.URL}/@${this.author}/api/${this.name}`, {
                 params: payload,
             });
             return response.data;
         } catch (error) {
             console.error("Error in getRes:", error);
-            throw error;
+            return `LiaSpark AI "${this.author}@${this.name}" is currently unavailable! Please come back later.`;
         }
     }
 
     /**
      * Sends a query to the LiaSpark API and retrieves a response message.
      * @param {string} query - The query to send.
+     * @param {string} name - Your name.
      * @returns {Promise<string>} - The response message.
      */
-    async ask(query) {
-        const { message } = await this.getRes({ query });
+    async ask(query, name) {
+        const { message } = await this.getRes({ query, name });
         return message;
     }
 
@@ -54,7 +55,7 @@ class LiaSpark {
                 }
             });
             const { data: all } = response;
-            return all[`${this.author}@${this.name}`];
+            return all[`${this.name}@${this.author}`];
         } catch (error) {
             console.error("Error in getInfo:", error);
             throw error;
